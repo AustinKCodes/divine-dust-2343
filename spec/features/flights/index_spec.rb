@@ -48,4 +48,19 @@ RSpec.describe "Flights Index Page" do
       expect(page).to have_content(@passenger3.name)
     end
   end
+
+  it "can remove a passenger from a flight" do
+    visit flights_path
+
+    within "#flight-#{@flight1.id}" do
+      expect(page).to have_content(@passenger1.name)
+      expect(page).to have_content(@passenger2.name)
+
+      click_button "Remove", match: :first
+
+      expect(current_path).to eq(flights_path)
+      expect(page).to_not have_content(@passenger1.name)
+      expect(page).to have_content(@passenger2.name)
+    end
+  end
 end
