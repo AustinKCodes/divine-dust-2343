@@ -13,14 +13,14 @@ RSpec.describe "Flights Index Page" do
     @passenger3 = Passenger.create!(name: "Mike", age: 25)
 
     @flight1.passengers << [@passenger1, @passenger2]
-    @flight2.passengers << [@passenger2, @passenger3]
+    @flight2.passengers << [@passenger2, @passenger3, @passenger1]
   end
 
   it "shows a list of all flight numbers" do
     visit flights_path
 
-    expect(page).to have_content(@flight1.number)
-    expect(page).to have_content(@flight2.number)
+    expect(page).to have_content("Flight Number: #{@flight1.number}")
+    expect(page).to have_content("Flight Number: #{@flight2.number}")
   end
 
   it "shows the name of the airline next to each flight number" do
@@ -41,11 +41,13 @@ RSpec.describe "Flights Index Page" do
     within "#flight-#{@flight1.id}" do
       expect(page).to have_content(@passenger1.name)
       expect(page).to have_content(@passenger2.name)
+      expect(page).to_not have_content(@passenger3.name)
     end
 
     within "#flight-#{@flight2.id}" do
       expect(page).to have_content(@passenger2.name)
       expect(page).to have_content(@passenger3.name)
+      expect(page).to have_content(@passenger1.name)
     end
   end
 
@@ -55,12 +57,20 @@ RSpec.describe "Flights Index Page" do
     within "#flight-#{@flight1.id}" do
       expect(page).to have_content(@passenger1.name)
       expect(page).to have_content(@passenger2.name)
+      expect(page).to have_button("Remove")
 
       click_button "Remove", match: :first
 
       expect(current_path).to eq(flights_path)
       expect(page).to_not have_content(@passenger1.name)
       expect(page).to have_content(@passenger2.name)
+      expect(page).to have_button("Remove")
+    end
+
+    within "#flight-#{@flight2.id}" do
+      expect(page).to have_content(@passenger1.name)
+      expect(page).to have_content(@passenger2.name)
+      expect(page).to have_content(@passenger3.name)
     end
   end
 end

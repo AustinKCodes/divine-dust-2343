@@ -14,13 +14,14 @@ RSpec.describe Airline, type: :model do
       @passenger1 = Passenger.create!(name: "Joe", age: 12)
       @passenger2 = Passenger.create!(name: "Anna", age: 18)
       @passenger3 = Passenger.create!(name: "Bob", age: 25)
+      @passenger4 = Passenger.create!(name: "John", age:30)
   
-      @flight1.passengers << [@passenger1, @passenger2]
-      @flight2.passengers << [@passenger1, @passenger3]
+      @flight1.passengers << [@passenger1, @passenger2, @passenger4]
+      @flight2.passengers << [@passenger1, @passenger3, @passenger4]
     end
 
     it "returns unique adult passengers for the airline" do
-      expect(@airline.adult_passengers).to contain_exactly(@passenger2, @passenger3)
+      expect(@airline.adult_passengers).to contain_exactly(@passenger2, @passenger3, @passenger4)
       expect(@airline.adult_passengers).to_not include(@passenger1)
     end
   end

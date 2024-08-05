@@ -13,8 +13,8 @@ RSpec.describe "Airline Show page" do
     visit airline_path(@airline)
 
     expect(page).to have_content("Adult Passengers")
-    expect(page).to have_content("Anna (Age: 18)")
-    expect(page).to have_content("Bob (Age: 25)")
+    expect(page).to have_content("Anna (Age: 18)", count: 1)
+    expect(page).to have_content("Bob (Age: 25)", count: 1)
     expect(page).to_not have_content("Joe (Age: 12)")
   end
 end
